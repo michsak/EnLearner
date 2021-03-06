@@ -3,12 +3,53 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#00bcd4">
+    android:background="#80000000">
 
-    <FrameLayout
-        android:id="@+id/frame_layout"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_box="bottom" />
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="122dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="40sp"
+            android:layout_marginTop="40sp"
+            android:layout_marginRight="40sp"
+            android:onClick="onWordClicked"
+            android:text="Button" />
+
+        <LinearLayout
+            android:id="@+id/iconsLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="93dp"
+            android:background="#00ffffff"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <android.support.wearable.view.CircledImageView
+                android:id="@+id/starImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/screen_percentage_05"
+                android:clickable="true"
+                android:onClick="addToWords"
+                android:src="@drawable/star_circle"
+                app:circle_color="@color/dark_blue"
+                app:circle_radius="23dp" />
+
+            <android.support.wearable.view.CircledImageView
+                android:id="@+id/listImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="showSavedWords"
+                android:src="@drawable/list_circle"
+                app:circle_color="@color/dark_blue"
+                app:circle_radius="23dp" />
+
+        </LinearLayout>
+    </LinearLayout>
 
 </android.support.wearable.view.BoxInsetLayout>

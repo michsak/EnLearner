@@ -8,35 +8,43 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-public class MainActivity extends WearableActivity {
+//TODO
+//take random word from parser
+//website-scraping and showing in textbox
+//read words from database - database config
+//alert how many days
 
-    private TextView mTextView;
-    public void determineRoundOrSquare(View view)
-    {
-        if(getResources().getConfiguration().isScreenRound())
-        {
-            //screen is round
-        }
-        else
-        {
-
-        }
-    }
+public class MainActivity extends WearableActivity
+{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        fragmentTransaction.add(R.id.frame_layout, new CustomCardFragment());
-        fragmentTransaction.commit();
+        WordsContainer wordsContainer = new WordsContainer();
 
         setAmbientEnabled();
 
         startService(new Intent(this, BackgroundService.class));
-
     }
+
+    public void onWordClicked(View view)
+    {
+        //go to website
+        //take description
+        //write down in textfield
+    }
+
+    public void addToWords(View view)
+    {
+        WordsContainer.savedWords.add("word");
+    }
+
+    public void showSavedWords(View view)
+    {
+        //start new activity with list and option to delete
+    }
+
+
 }
