@@ -5,8 +5,8 @@ import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ThemedSpinnerAdapter;
 
-import com.parse.CountCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -17,7 +17,7 @@ import com.parse.ParseQuery;
 //read words from database - database config
 //alert how many days
 
-public class MainActivity extends WearableActivity
+public class MainActivity extends WearableActivity implements Runnable
 {
     private String word = "";
     private final int wordsCount = 2;
@@ -30,15 +30,21 @@ public class MainActivity extends WearableActivity
         WordsContainer wordsContainer = new WordsContainer();
 
         setAmbientEnabled();
-
         startService(new Intent(this, BackgroundService.class));
 
-        downloadWordsFromDataBase();
+        for (int i=0; i<WordsContainer.maxNumberOfWordsInMemory; i++)
+        {
+            if (!WordsContainer.checkIfNumberOfSavedWordsReachesMax())
+            {
+                downloadSingleWordFromDataBase();    //do in other thread
+            }
+        }
     }
 
-    private void downloadWordsFromDataBase()
+    private void downloadSingleWordFromDataBase()
     {
         int randomWordNumber = (int)(Math.random()*(wordsCount));
+
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Words");
         query.orderByAscending("word");
         query.setSkip(randomWordNumber);
@@ -50,15 +56,21 @@ public class MainActivity extends WearableActivity
                 if (e==null && object!=null)
                 {
                     word = object.getString("word").toString();
-                    Button button = findViewById(R.id.button2);
-                    button.setText(word);
+                    WordsContainer.savedWords.add(word);
                 }
                 else
                 {
-                    Log.i("word", "fail");
+                    word = "Loading";
                 }
+                setButtonText();  //in future should be invoked elsewhere
             }
         });
+    }
+
+    private void setButtonText()
+    {
+        final Button wordButton = findViewById(R.id.wordButton);  //may be needed to initialize inside
+        wordButton.setText(WordsContainer.savedWords.get(0));
     }
 
     public void onWordClicked(View view)
@@ -78,5 +90,9 @@ public class MainActivity extends WearableActivity
         //start new activity with list and option to delete
     }
 
-
+    @Override
+    public void run()
+    {
+        //do downloads in seperate threads
+    }
 }

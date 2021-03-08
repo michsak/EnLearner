@@ -11,7 +11,7 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/wordButton"
             android:layout_width="122dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
