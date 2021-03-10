@@ -1,5 +1,4 @@
 package com.project.enlearner;
-
 import java.util.ArrayList;
 
 public class WordsContainer

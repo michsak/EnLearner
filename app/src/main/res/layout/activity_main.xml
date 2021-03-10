@@ -12,19 +12,22 @@
 
         <Button
             android:id="@+id/wordButton"
-            android:layout_width="122dp"
-            android:layout_height="wrap_content"
+            android:layout_width="187dp"
+            android:layout_height="70dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="40sp"
-            android:layout_marginTop="40sp"
+            android:layout_marginTop="60sp"
             android:layout_marginRight="40sp"
+            android:background="@android:color/transparent"
             android:onClick="onWordClicked"
-            android:text="Button" />
+            android:text="Button"
+            android:textColor="?android:attr/colorControlNormal"
+            android:textSize="20sp" />
 
         <LinearLayout
             android:id="@+id/iconsLinearLayout"
             android:layout_width="match_parent"
-            android:layout_height="93dp"
+            android:layout_height="83dp"
             android:background="#00ffffff"
             android:gravity="center"
             android:orientation="horizontal">

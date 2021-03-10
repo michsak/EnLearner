@@ -5,22 +5,23 @@ import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ThemedSpinnerAdapter;
-
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.SaveCallback;
+
 
 //TODO
 //website-scraping and showing in textbox
-//read words from database - database config
+//save difficult words in shared preferences
+//custom list layout for difficult words with thrash
 //alert how many days
 
 public class MainActivity extends WearableActivity implements Runnable
 {
     private String word = "";
-    private final int wordsCount = 2;
+    private final int wordsCount = 362;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +68,39 @@ public class MainActivity extends WearableActivity implements Runnable
         });
     }
 
+    /**Method used only to add new words to database**/
+    private void addWordsToDatabase(String word, int number)
+    {
+        ParseObject words = new ParseObject("Words");
+        words.put("word", word);
+        words.put("number", number);
+        words.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e)
+            {
+                if (e==null)
+                {
+                    Log.i("info", "Success");
+                }
+                else
+                {
+                    Log.i("info", "Something went wrong. Try again.");
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    /**Method used only to add new words to database**/
+    private void iterateThroughAllTextFileLines(String[] words, int initialNumber)
+    {
+        for (String word : words)
+        {
+            addWordsToDatabase(word, initialNumber);
+            initialNumber += 1;
+        }
+    }
+
     private void setButtonText()
     {
         final Button wordButton = findViewById(R.id.wordButton);  //may be needed to initialize inside
@@ -78,11 +112,15 @@ public class MainActivity extends WearableActivity implements Runnable
         //go to website
         //take description
         //write down in textfield
+        Button button = findViewById(R.id.wordButton);
+        String websiteName = "https:dictionary.cambridge.org/dictionary/english/".concat(button.getText().toString());
+
+        WebsiteScraper websiteScraper = new WebsiteScraper(websiteName);
     }
 
     public void addToWords(View view)
     {
-        WordsContainer.savedWords.add("word");
+
     }
 
     public void showSavedWords(View view)
