@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="back4app_server_url">http://3.22.99.111/parse/</string>
-    <string name="back4app_app_id">myappID</string>
-    <string name="back4app_client_key">ulv7Zg0ZghZY</string>
-</resources>
