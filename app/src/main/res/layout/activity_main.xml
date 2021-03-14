@@ -10,19 +10,37 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/wordButton"
-            android:layout_width="187dp"
-            android:layout_height="70dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="40sp"
-            android:layout_marginTop="60sp"
-            android:layout_marginRight="40sp"
-            android:background="@android:color/transparent"
-            android:onClick="onWordClicked"
-            android:text="Button"
-            android:textColor="?android:attr/colorControlNormal"
-            android:textSize="20sp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/descriptionTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="20sp"
+                android:layout_marginRight="20sp"
+                android:layout_marginTop="40sp"
+                android:background="@android:color/transparent"
+                android:visibility="invisible"
+                android:text="TextView"
+                android:textAlignment="center"/>
+
+            <Button
+                android:id="@+id/wordButton"
+                android:layout_width="187dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="40sp"
+                android:layout_marginTop="60sp"
+                android:layout_marginRight="40sp"
+                android:background="@android:color/transparent"
+                android:onClick="onWordClicked"
+                android:text="Button"
+                android:textColor="?android:attr/colorControlNormal"
+                android:textSize="20sp" />
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/iconsLinearLayout"
@@ -53,6 +71,7 @@
                 app:circle_radius="23dp" />
 
         </LinearLayout>
+
     </LinearLayout>
 
 </android.support.wearable.view.BoxInsetLayout>

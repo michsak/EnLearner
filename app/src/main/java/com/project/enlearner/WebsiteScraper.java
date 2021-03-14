@@ -31,11 +31,11 @@ public class WebsiteScraper
         }
         if (clearDefinitionText[0] != null && !clearDefinitionText[0].equals("") && !clearDefinitionText[0].startsWith("past "))
         {
-            finalTextBoxContent = clearDefinitionText[0] + "\n";
+            finalTextBoxContent = clearDefinitionText[0] + "\n\n";
         }
         else
         {
-            finalTextBoxContent = clearDefinitionText[1] + "\n";
+            finalTextBoxContent = clearDefinitionText[1] + "\n\n";
         }
         if (clearExamplesText[0] != null && !clearExamplesText[0].equals(""))
         {
@@ -75,10 +75,11 @@ public class WebsiteScraper
         {
             String message = Jsoup.clean(text, Whitelist.none());
             finalText = message;
+            finalText = finalText.substring(0,1).toUpperCase() + finalText.substring(1, finalText.length());
 
             if (message.endsWith(":"))
             {
-                finalText = message.substring(0, message.length()-1);
+                finalText = finalText.substring(0, message.length()-1);
             }
         }
 

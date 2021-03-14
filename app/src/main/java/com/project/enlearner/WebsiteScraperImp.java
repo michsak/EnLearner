@@ -1,6 +1,5 @@
 package com.project.enlearner;
 import android.os.AsyncTask;
-
 import java.io.IOException;
 
 public class WebsiteScraperImp extends AsyncTask<Void, Void, String>

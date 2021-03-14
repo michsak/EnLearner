@@ -5,6 +5,8 @@ import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -15,7 +17,6 @@ import java.net.URL;
 
 
 //TODO
-//website-scraping and showing in textbox
 //save difficult words in shared preferences
 //custom list layout for difficult words with thrash
 //alert how many days
@@ -111,16 +112,19 @@ public class MainActivity extends WearableActivity implements Runnable
 
     public void onWordClicked(View view)
     {
-        //write down in textfield
-        Button button = findViewById(R.id.wordButton);
+        final Button button = findViewById(R.id.wordButton);
+        final TextView descriptionTextView = findViewById(R.id.descriptionTextView);
         WebsiteScraperImp websiteScraperImp = (WebsiteScraperImp) new WebsiteScraperImp(new WebsiteScraperImp.ScraperResponse()
         {
             @Override
             public void processFinished(String output)
             {
-                Log.i("info", output);
+                button.setVisibility(View.INVISIBLE);
+                descriptionTextView.setText(output);
+                descriptionTextView.setVisibility(View.VISIBLE);
             }
         }, button.getText().toString()).execute();
+
     }
 
     public void addToWords(View view)
