@@ -11,6 +11,8 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
+import java.net.URL;
+
 
 //TODO
 //website-scraping and showing in textbox
@@ -109,13 +111,16 @@ public class MainActivity extends WearableActivity implements Runnable
 
     public void onWordClicked(View view)
     {
-        //go to website
-        //take description
         //write down in textfield
         Button button = findViewById(R.id.wordButton);
-        String websiteName = "https:dictionary.cambridge.org/dictionary/english/".concat(button.getText().toString());
-
-        WebsiteScraper websiteScraper = new WebsiteScraper(websiteName);
+        WebsiteScraperImp websiteScraperImp = (WebsiteScraperImp) new WebsiteScraperImp(new WebsiteScraperImp.ScraperResponse()
+        {
+            @Override
+            public void processFinished(String output)
+            {
+                Log.i("info", output);
+            }
+        }, button.getText().toString()).execute();
     }
 
     public void addToWords(View view)
