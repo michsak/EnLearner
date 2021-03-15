@@ -9,18 +9,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-
-import java.util.ArrayList;
 import java.util.HashSet;
 
 
 //TODO
-//save difficult words in shared preferences
+//read words from shared pref
 //custom list layout for difficult words with thrash
 //alert how many days
 
@@ -41,7 +38,7 @@ public class MainActivity extends WearableActivity implements Runnable
         startService(new Intent(this, BackgroundService.class));
 
         sharedPreferences = this.getSharedPreferences("com.project.enlearner", Context.MODE_PRIVATE);
-
+        //clearSharedPreferences();
 
         for (int i=0; i<WordsContainer.maxNumberOfWordsInMemory; i++)
         {
@@ -108,18 +105,29 @@ public class MainActivity extends WearableActivity implements Runnable
     {
         final Button button = findViewById(R.id.wordButton);
         String word = button.getText().toString();
-        HashSet<String> words = new HashSet<String>();
+        HashSet<String> sharedPrefSet = new HashSet<String>();
+
         try
         {
-            words.add(word);
-            ObjectSerializer.serialize(words);
-            sharedPreferences.edit().putString("words", ObjectSerializer.serialize(words)).apply();
+            if(sharedPreferences.contains("words"))
+            {
+                sharedPrefSet = (HashSet<String>) sharedPreferences.getStringSet("words", new HashSet<String>());
+            }
+            sharedPrefSet.add(word);
+            sharedPreferences.edit().putStringSet("words", sharedPrefSet).apply();
+            Toast.makeText(getApplicationContext(), "Word has been added", Toast.LENGTH_SHORT).show();
         }
         catch (Exception e)
         {
-            e.printStackTrace();
-            //Toast.makeText(this )
+            Toast.makeText(getApplicationContext(), "Try again later", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    /***method used only to clear shared prefs from device**/
+    private void clearSharedPreferences()
+    {
+        SharedPreferences preferences = getSharedPreferences("com.project.enlearner", 0);
+        preferences.edit().clear().commit();
     }
 
     public void showSavedWords(View view)
