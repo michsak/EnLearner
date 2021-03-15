@@ -1,16 +1,22 @@
 package com.project.enlearner;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 
 
 //TODO
@@ -22,6 +28,7 @@ public class MainActivity extends WearableActivity implements Runnable
 {
     private String word = "";
     private final int wordsCount = 362;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +39,9 @@ public class MainActivity extends WearableActivity implements Runnable
 
         setAmbientEnabled();
         startService(new Intent(this, BackgroundService.class));
+
+        sharedPreferences = this.getSharedPreferences("com.project.enlearner", Context.MODE_PRIVATE);
+
 
         for (int i=0; i<WordsContainer.maxNumberOfWordsInMemory; i++)
         {
@@ -92,17 +102,32 @@ public class MainActivity extends WearableActivity implements Runnable
                 exampleTextView.setVisibility(View.VISIBLE);
             }
         }, button.getText().toString()).execute();
-
     }
 
-    public void addToWords(View view)
+    public void addToMemory(View view)
     {
-
+        final Button button = findViewById(R.id.wordButton);
+        String word = button.getText().toString();
+        HashSet<String> words = new HashSet<String>();
+        try
+        {
+            words.add(word);
+            ObjectSerializer.serialize(words);
+            sharedPreferences.edit().putString("words", ObjectSerializer.serialize(words)).apply();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            //Toast.makeText(this )
+        }
     }
 
     public void showSavedWords(View view)
     {
         //start new activity with list and option to delete
+        //sharedPreferences.getString("username", "");  //returns s1 if nothing is there
+        //ArrayList<String> sharedPrefList = (ArrayList<String>)
+        //                    ObjectSerializer.deserialize(sharedPreferences.getString("words", ObjectSerializer.serialize(new ArrayList<String>())));
     }
 
     @Override

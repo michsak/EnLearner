@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/screen_percentage_05"
                 android:clickable="true"
-                android:onClick="addToWords"
+                android:onClick="addToMemory"
                 android:src="@drawable/star_circle"
                 app:circle_color="@color/dark_blue"
                 app:circle_radius="23dp" />
