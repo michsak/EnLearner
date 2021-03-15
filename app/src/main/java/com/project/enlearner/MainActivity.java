@@ -11,9 +11,6 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.SaveCallback;
-
-import java.net.URL;
 
 
 //TODO
@@ -71,39 +68,6 @@ public class MainActivity extends WearableActivity implements Runnable
         });
     }
 
-    /**Method used only to add new words to database**/
-    private void addWordsToDatabase(String word, int number)
-    {
-        ParseObject words = new ParseObject("Words");
-        words.put("word", word);
-        words.put("number", number);
-        words.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e)
-            {
-                if (e==null)
-                {
-                    Log.i("info", "Success");
-                }
-                else
-                {
-                    Log.i("info", "Something went wrong. Try again.");
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    /**Method used only to add new words to database**/
-    private void iterateThroughAllTextFileLines(String[] words, int initialNumber)
-    {
-        for (String word : words)
-        {
-            addWordsToDatabase(word, initialNumber);
-            initialNumber += 1;
-        }
-    }
-
     private void setButtonText()
     {
         final Button wordButton = findViewById(R.id.wordButton);  //may be needed to initialize inside
@@ -113,15 +77,19 @@ public class MainActivity extends WearableActivity implements Runnable
     public void onWordClicked(View view)
     {
         final Button button = findViewById(R.id.wordButton);
-        final TextView descriptionTextView = findViewById(R.id.descriptionTextView);
+        final TextView descriptionTextView = findViewById(R.id.definitionTextView);
+        final TextView exampleTextView = findViewById(R.id.exampleTextView);
         WebsiteScraperImp websiteScraperImp = (WebsiteScraperImp) new WebsiteScraperImp(new WebsiteScraperImp.ScraperResponse()
         {
             @Override
             public void processFinished(String output)
             {
+                String lines[] = output.split("\\r?\\n");
                 button.setVisibility(View.INVISIBLE);
-                descriptionTextView.setText(output);
+                descriptionTextView.setText(lines[0]);
                 descriptionTextView.setVisibility(View.VISIBLE);
+                exampleTextView.setText(lines[lines.length-1]);
+                exampleTextView.setVisibility(View.VISIBLE);
             }
         }, button.getText().toString()).execute();
 
