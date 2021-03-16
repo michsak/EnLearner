@@ -13,13 +13,14 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+
 import java.util.HashSet;
 
 
 //TODO
-//read words from shared pref
-//custom list layout for difficult words with thrash
 //alert how many days
+//add icon
+//unit tests
 
 public class MainActivity extends WearableActivity implements Runnable
 {
@@ -52,7 +53,6 @@ public class MainActivity extends WearableActivity implements Runnable
     private void downloadSingleWordFromDataBase()
     {
         int randomWordNumber = (int)(Math.random()*(wordsCount));
-
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Words");
         query.orderByAscending("word");
         query.setSkip(randomWordNumber);
@@ -105,22 +105,45 @@ public class MainActivity extends WearableActivity implements Runnable
     {
         final Button button = findViewById(R.id.wordButton);
         String word = button.getText().toString();
-        HashSet<String> sharedPrefSet = new HashSet<String>();
+        addWordToSharedPreferences(word);
+    }
 
+    private void addWordToSharedPreferences(String word)
+    {
         try
         {
+            HashSet<String> sharedPrefSet = new HashSet<String>();
             if(sharedPreferences.contains("words"))
             {
                 sharedPrefSet = (HashSet<String>) sharedPreferences.getStringSet("words", new HashSet<String>());
             }
             sharedPrefSet.add(word);
+            sharedPreferences.edit().clear().apply();
             sharedPreferences.edit().putStringSet("words", sharedPrefSet).apply();
             Toast.makeText(getApplicationContext(), "Word has been added", Toast.LENGTH_SHORT).show();
+
+            for (String wordnew : sharedPrefSet)
+            {
+                Log.i("info", wordnew);
+            }
         }
         catch (Exception e)
         {
             Toast.makeText(getApplicationContext(), "Try again later", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public static void deleteWordFromSharedPreferences(SharedPreferences sharedPreferences, String word, Context context)
+    {
+        HashSet<String> sharedPrefSet = new HashSet<String>();
+        if(sharedPreferences.contains("words"))
+        {
+            sharedPrefSet = (HashSet<String>) sharedPreferences.getStringSet("words", new HashSet<String>());
+        }
+        sharedPrefSet.remove(word);
+        sharedPreferences.edit().clear().apply();
+        sharedPreferences.edit().putStringSet("words", sharedPrefSet).apply();
+        Toast.makeText(context, "Word has been deleted", Toast.LENGTH_SHORT).show();
     }
 
     /***method used only to clear shared prefs from device**/
@@ -132,10 +155,15 @@ public class MainActivity extends WearableActivity implements Runnable
 
     public void showSavedWords(View view)
     {
-        //start new activity with list and option to delete
-        //sharedPreferences.getString("username", "");  //returns s1 if nothing is there
-        //ArrayList<String> sharedPrefList = (ArrayList<String>)
-        //                    ObjectSerializer.deserialize(sharedPreferences.getString("words", ObjectSerializer.serialize(new ArrayList<String>())));
+        if (sharedPreferences.contains("words"))
+        {
+            Intent intent = new Intent(getApplicationContext(), DifficultWordsActivity.class);
+            startActivity(intent);
+        }
+        else
+        {
+            Toast.makeText(getApplicationContext(), "You havn't saved any word", Toast.LENGTH_SHORT);
+        }
     }
 
     @Override
