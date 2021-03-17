@@ -3,7 +3,7 @@ import android.app.Application;
 import com.parse.Parse;
 import com.parse.ParseACL;
 
-public class App extends Application
+public class ServerConnectionEstablisher extends Application
 {
     @Override
     public void onCreate()

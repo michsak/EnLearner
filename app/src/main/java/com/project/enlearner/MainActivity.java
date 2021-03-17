@@ -19,14 +19,16 @@ import java.util.HashSet;
 
 //TODO
 //alert how many days
+//notifications
 //add icon
 //unit tests
 
-public class MainActivity extends WearableActivity implements Runnable
+public class MainActivity extends WearableActivity
 {
     private String word = "";
     private final int wordsCount = 362;
     private SharedPreferences sharedPreferences;
+    private boolean isWordReadyToBeDisplayed = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class MainActivity extends WearableActivity implements Runnable
                 downloadSingleWordFromDataBase();    //do in other thread
             }
         }
+
     }
 
     private void downloadSingleWordFromDataBase()
@@ -64,20 +67,24 @@ public class MainActivity extends WearableActivity implements Runnable
                 if (e==null && object!=null)
                 {
                     word = object.getString("word").toString();
-                    WordsContainer.savedWords.add(word);
+                    if (isWordReadyToBeDisplayed)
+                    {
+                        WordsContainer.savedWords.add(word);
+                        isWordReadyToBeDisplayed = false;
+                        setButtonText();
+                    }
                 }
                 else
                 {
                     word = "Loading";
                 }
-                setButtonText();  //in future should be invoked elsewhere
             }
         });
     }
 
     private void setButtonText()
     {
-        final Button wordButton = findViewById(R.id.wordButton);  //may be needed to initialize inside
+        final Button wordButton = findViewById(R.id.wordButton);
         wordButton.setText(WordsContainer.savedWords.get(0));
     }
 
@@ -99,6 +106,18 @@ public class MainActivity extends WearableActivity implements Runnable
                 exampleTextView.setVisibility(View.VISIBLE);
             }
         }, button.getText().toString()).execute();
+    }
+
+    public void onExampleOrDescriptionClicked(View view)
+    {
+        final TextView descriptionTextView = findViewById(R.id.definitionTextView);
+        final TextView exampleTextView = findViewById(R.id.exampleTextView);
+        final Button button = findViewById(R.id.wordButton);
+        descriptionTextView.setText("");
+        descriptionTextView.setVisibility(View.INVISIBLE);
+        exampleTextView.setText("");
+        exampleTextView.setVisibility(View.INVISIBLE);
+        button.setVisibility(View.VISIBLE);
     }
 
     public void addToMemory(View view)
@@ -164,11 +183,5 @@ public class MainActivity extends WearableActivity implements Runnable
         {
             Toast.makeText(getApplicationContext(), "You havn't saved any word", Toast.LENGTH_SHORT);
         }
-    }
-
-    @Override
-    public void run()
-    {
-        //do downloads in seperate threads
     }
 }

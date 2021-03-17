@@ -11,9 +11,11 @@ public class WordsContainer
         savedWords = new ArrayList<String>();
     }
 
-    public static void removeLastFirstElementFromWordList()
+    public static void removeFirstElementFromWordList()   //may be wrong with indexing
     {
         savedWords.remove(0);
+        ArrayList<String> newSavedWords = new ArrayList<String>();
+        newSavedWords.addAll(savedWords);
     }
 
     public static boolean checkIfNumberOfSavedWordsReachesMax()
