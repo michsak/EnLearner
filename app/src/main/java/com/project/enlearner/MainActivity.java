@@ -1,4 +1,6 @@
 package com.project.enlearner;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,14 +15,13 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-
+import java.util.Calendar;
 import java.util.HashSet;
 
 
 //TODO
-//new activity on short click on word --> go to definition and example
 //alert how many days
-//notifications
+//notifications time
 //add icon
 //unit tests
 
@@ -32,26 +33,28 @@ public class MainActivity extends WearableActivity
     private boolean isWordReadyToBeDisplayed = true;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         WordsContainer wordsContainer = new WordsContainer();
-
         setAmbientEnabled();
-        startService(new Intent(this, BackgroundService.class));
-
         sharedPreferences = this.getSharedPreferences("com.project.enlearner", Context.MODE_PRIVATE);
         //clearSharedPreferences();
+        setUpNotification();
+    }
 
-        for (int i=0; i<WordsContainer.maxNumberOfWordsInMemory; i++)
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        for (int i=WordsContainer.savedWords.size(); i<WordsContainer.maxNumberOfWordsInMemory; i++)
         {
             if (!WordsContainer.checkIfNumberOfSavedWordsReachesMax())
             {
-                downloadSingleWordFromDataBase();    //do in other thread
+                downloadSingleWordFromDataBase();
             }
         }
-
     }
 
     private void downloadSingleWordFromDataBase()
@@ -182,7 +185,19 @@ public class MainActivity extends WearableActivity
         }
         else
         {
-            Toast.makeText(getApplicationContext(), "You havn't saved any word", Toast.LENGTH_SHORT);
+            Toast.makeText(getApplicationContext(), "You haven't saved any word", Toast.LENGTH_SHORT);
         }
+    }
+
+    private void setUpNotification()
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 12);
+        calendar.set(Calendar.MINUTE, 54);
+        calendar.set(Calendar.SECOND, 00);
+        Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 }
