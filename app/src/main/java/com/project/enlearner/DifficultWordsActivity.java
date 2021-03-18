@@ -1,5 +1,6 @@
 package com.project.enlearner;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
@@ -29,6 +30,7 @@ public class DifficultWordsActivity extends WearableActivity
         setAmbientEnabled();
         showWords();
         enableDeletingWords();
+        enableGoToDefinitionAndExampleActivity();
     }
 
     private void showWords()
@@ -54,12 +56,25 @@ public class DifficultWordsActivity extends WearableActivity
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l)
             {
-                Log.i("info", listOfDifficultWords.get(i));
                 MainActivity.deleteWordFromSharedPreferences(sharedPreferences, listOfDifficultWords.get(i), getApplicationContext());
                 listOfDifficultWords.remove(i);
                 difficultWordsArrayAdapter.notifyDataSetChanged();
                 Toast.makeText(getApplicationContext(), "Word has been deleted", Toast.LENGTH_SHORT).show();
                 return true;
+            }
+        });
+    }
+
+    private void enableGoToDefinitionAndExampleActivity()
+    {
+        wordsListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
+            {
+                Intent intent = new Intent(getApplicationContext(), DefinitionAndExampleActivity.class);
+                intent.putExtra("word", listOfDifficultWords.get(i));
+                startActivity(intent);
             }
         });
     }

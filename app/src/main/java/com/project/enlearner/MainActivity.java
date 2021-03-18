@@ -18,6 +18,7 @@ import java.util.HashSet;
 
 
 //TODO
+//new activity on short click on word --> go to definition and example
 //alert how many days
 //notifications
 //add icon

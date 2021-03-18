@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.project.enlearner">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -27,11 +28,6 @@
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
 
-        <activity
-            android:name=".DifficultWordsActivity"
-            android:label="@string/title_activity_difficult_words">
-        </activity>
-
         <meta-data
             android:name="com.parse.SERVER_URL"
             android:value="@string/back4app_server_url" />
@@ -50,6 +46,14 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".DefinitionAndExampleActivity"
+            android:label="@string/title_activity_definition_and_example">
+        </activity>
+        <activity
+            android:name=".DifficultWordsActivity"
+            android:label="@string/title_activity_difficult_words">
         </activity>
 
         <service
