@@ -1,7 +1,10 @@
 package com.project.enlearner;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,15 +23,16 @@ import java.util.HashSet;
 
 
 //TODO
-//alert how many days
-//notifications time
+//take words from saved
 //add icon
 //unit tests
 
 public class MainActivity extends WearableActivity
 {
-    private String word = "";
     private final int wordsCount = 362;
+    private final int[] intervalTimePossibilities = new int[]{12, 16, 24};
+    private String word = "";
+    private int intervalTime = 24;
     private SharedPreferences sharedPreferences;
     private boolean isWordReadyToBeDisplayed = true;
 
@@ -41,7 +45,8 @@ public class MainActivity extends WearableActivity
         setAmbientEnabled();
         sharedPreferences = this.getSharedPreferences("com.project.enlearner", Context.MODE_PRIVATE);
         //clearSharedPreferences();
-        setUpNotification();
+        showDialog();
+        setUpNotification(intervalTime);
     }
 
     @Override
@@ -55,6 +60,31 @@ public class MainActivity extends WearableActivity
                 downloadSingleWordFromDataBase();
             }
         }
+    }
+
+    private void showDialog()
+    {
+        final Dialog dialog = new Dialog(this);
+        View myLayout = getLayoutInflater().inflate(R.layout.dialog_layout, null);
+        setButtonListener(dialog, myLayout, R.id.twelveHoursButton, 0);
+        setButtonListener(dialog, myLayout, R.id.sixteenHoursButton, 1);
+        setButtonListener(dialog, myLayout, R.id.twentyfourHoursButton, 2);
+        dialog.setContentView(myLayout);
+        dialog.show();
+    }
+
+    private void setButtonListener(final Dialog dialog, View myLayout, int buttonId, final int timeId)
+    {
+        Button positiveButton = myLayout.findViewById(buttonId);
+        positiveButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                intervalTime = intervalTimePossibilities[timeId];
+                dialog.cancel();
+            }
+        });
     }
 
     private void downloadSingleWordFromDataBase()
@@ -189,15 +219,14 @@ public class MainActivity extends WearableActivity
         }
     }
 
-    private void setUpNotification()
+    private void setUpNotification(int interval)
     {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 12);
-        calendar.set(Calendar.MINUTE, 54);
-        calendar.set(Calendar.SECOND, 00);
+        calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY));
+        calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE));
         Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_HOUR*interval, pendingIntent);
     }
 }

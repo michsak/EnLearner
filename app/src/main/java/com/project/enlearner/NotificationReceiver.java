@@ -49,7 +49,7 @@ public class NotificationReceiver extends BroadcastReceiver
                     .setContentIntent(pendingIntent)
                     .setSmallIcon(android.R.drawable.arrow_up_float)
                     .setContentTitle("You've got new word to learn.")
-                    .setContentText("Check it out!")
+                    .setContentText("Check this out!")
                     .setAutoCancel(true);
 
             notificationManager.notify(notificationId, builder.build());

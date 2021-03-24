@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.wearable.view.BoxInsetLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#80000000">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/dialogTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="58dp"
+            android:text="@string/new_words_interval"
+            android:textColor="?android:attr/colorControlNormal"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/twelveHoursButton"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="31dp"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/rounded_button"
+            android:text="@string/twelve_hours"
+            app:layout_constraintEnd_toStartOf="@+id/sixteenHoursButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dialogTextView" />
+
+        <Button
+            android:id="@+id/sixteenHoursButton"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/rounded_button"
+            android:text="@string/sixteen_hours"
+            app:layout_constraintEnd_toStartOf="@+id/twentyfourHoursButton"
+            app:layout_constraintTop_toBottomOf="@+id/dialogTextView" />
+
+        <Button
+            android:id="@+id/twentyfourHoursButton"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="31dp"
+            android:background="@drawable/rounded_button"
+            android:text="@string/twenty_four_hours"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dialogTextView" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</android.support.wearable.view.BoxInsetLayout>
