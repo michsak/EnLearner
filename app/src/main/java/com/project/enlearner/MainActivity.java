@@ -23,8 +23,6 @@ import java.util.HashSet;
 
 
 //TODO
-//add icon
-//all string to xml file
 //unit tests
 
 public class MainActivity extends WearableActivity implements Runnable

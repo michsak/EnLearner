@@ -75,7 +75,7 @@
                     android:id="@+id/starImage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/screen_percentage_05"
+                    android:layout_marginRight="@dimen/screen_percentage_05"
                     android:clickable="true"
                     android:onClick="addToMemory"
                     android:src="@drawable/star_circle"
