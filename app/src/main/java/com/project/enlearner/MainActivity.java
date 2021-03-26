@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
@@ -16,7 +17,6 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -27,11 +27,12 @@ import java.util.HashSet;
 //all string to xml file
 //unit tests
 
-public class MainActivity extends WearableActivity
+public class MainActivity extends WearableActivity implements Runnable
 {
     private final int wordsCount = 362;
     private final int[] intervalTimePossibilities = new int[]{12, 16, 24};
     private final int maxNumberOfWordsInMemory = 5;
+    private boolean firstRun = true;
     private String word = "";
     private int intervalTime = 24;
     private SharedPreferences difficultWordsSharedPrefs;
@@ -47,6 +48,34 @@ public class MainActivity extends WearableActivity
         newWordsSharedPrefs = this.getSharedPreferences("newWordsPreference", Context.MODE_PRIVATE);
         //clearSharedPreferences("newWordsPreference");
         onFirstRun();
+        Thread internetConnectionCheck = new Thread();
+        internetConnectionCheck.start();
+    }
+
+    @Override
+    public void run()
+    {
+        while (isNetworkConnected() == true && firstRun)
+        {
+            saveDownloadedWordsToSharedPrefs();
+            firstRun = false;
+            Log.i("info", Boolean.toString(isNetworkConnected()));
+
+            try
+            {
+                Thread.sleep(15000);
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private boolean isNetworkConnected()
+    {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnected();
     }
 
     private void onFirstRun()

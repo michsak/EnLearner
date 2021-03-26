@@ -6,4 +6,12 @@
     -->
     <string name="hello_world">Hello Square World!</string>
     <string name="title_activity_go_to_website">GoToWebsiteActivity</string>
+    <string name="title_activity_difficult_words">DifficultWordsActivity</string>
+    <string name="title_activity_definition_and_example">DefinitionAndExampleActivity</string>
+    <string name="notification_posted">posted</string>
+    <string name="twelve_hours">12h</string>
+    <string name="sixteen_hours">16h</string>
+    <string name="twenty_four_hours">24h</string>
+    <string name="new_words_interval">Choose new words interval</string>
+    <string name="loading_text">Loading...</string>
 </resources>

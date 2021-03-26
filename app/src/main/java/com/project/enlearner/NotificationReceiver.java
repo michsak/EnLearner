@@ -17,7 +17,7 @@ public class NotificationReceiver extends BroadcastReceiver
     {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Intent repeatingIntent = new Intent(context, MainActivity.class);
-        repeatingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        repeatingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationId, repeatingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
