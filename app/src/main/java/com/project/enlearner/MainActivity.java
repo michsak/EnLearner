@@ -74,8 +74,7 @@ public class MainActivity extends WearableActivity implements Runnable
 
     private void onFirstRun()
     {
-        //Boolean isFirstRun = getSharedPreferences(getString(R.string.first_run_preference), MODE_PRIVATE).getBoolean("isFirstRun", true);
-        Boolean isFirstRun = true;
+        Boolean isFirstRun = getSharedPreferences(getString(R.string.first_run_preference), MODE_PRIVATE).getBoolean("isFirstRun", true);
         if (isFirstRun)
         {
             showDialog();
