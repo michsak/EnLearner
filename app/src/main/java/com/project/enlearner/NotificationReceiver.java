@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat;
 public class NotificationReceiver extends BroadcastReceiver
 {
     private final int notificationId = 100;
+    private final String channelId = "channel_01";
 
     @Override
     public void onReceive(Context context, Intent intent)
@@ -22,18 +23,17 @@ public class NotificationReceiver extends BroadcastReceiver
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
         {
-            String CHANNEL_ID = "channel_01";
             CharSequence name = "channel";
             String Description = "notification channel 01";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+            NotificationChannel mChannel = new NotificationChannel(channelId, name, importance);
             mChannel.setDescription(Description);
             mChannel.enableLights(true);
             mChannel.setLightColor(Color.RED);
             mChannel.setShowBadge(false);
             notificationManager.createNotificationChannel(mChannel);
 
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
                     .setContentIntent(pendingIntent)
                     .setSmallIcon(android.R.drawable.arrow_up_float)
                     .setVibrate(new long[] { 1000, 1000 })

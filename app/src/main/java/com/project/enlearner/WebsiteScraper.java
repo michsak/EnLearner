@@ -8,8 +8,8 @@ import java.io.IOException;
 
 public class WebsiteScraper
 {
-    private String websiteName;
     private final int scrapingTableSize = 2;
+    private String websiteName;
 
     public WebsiteScraper(String word)
     {
@@ -53,11 +53,10 @@ public class WebsiteScraper
     private String[] scrapeFromPage(String link, String divClassName) throws IOException
     {
         String[] rawDefinition = new String[scrapingTableSize];
-
         Document doc = Jsoup.connect(link).get();
         Elements allContent = doc.getElementsByClass(divClassName);
-
         int i = 0;
+
         for (Element seperateLine : allContent)
         {
             rawDefinition[i] = seperateLine.toString();

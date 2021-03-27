@@ -23,9 +23,9 @@ public class DifficultWordsActivity extends WearableActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setTitle("Difficult Words");
+        setTitle(getString(R.string.difficult_words_string));
         setContentView(R.layout.activity_difficult_words);
-        sharedPreferences = this.getSharedPreferences("com.project.enlearner", Context.MODE_PRIVATE);
+        sharedPreferences = this.getSharedPreferences(getString(R.string.difficult_word_preferences), Context.MODE_PRIVATE);
         setAmbientEnabled();
         showWords();
         enableDeletingWords();
@@ -37,7 +37,7 @@ public class DifficultWordsActivity extends WearableActivity
         wordsListView = findViewById(R.id.difficultWordsListView);
         HashSet<String> setOfDifficultWords = new HashSet<String>();
         listOfDifficultWords = new ArrayList<String>();
-        setOfDifficultWords = (HashSet<String>) sharedPreferences.getStringSet("words", new HashSet<String>());
+        setOfDifficultWords = (HashSet<String>) sharedPreferences.getStringSet(getString(R.string.new_shared_pref_word), new HashSet<String>());
 
         for (String word : setOfDifficultWords)
         {
@@ -55,10 +55,10 @@ public class DifficultWordsActivity extends WearableActivity
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l)
             {
-                MainActivity.deleteWordFromSharedPreferences(sharedPreferences, listOfDifficultWords.get(i), getApplicationContext(), "words");
+                MainActivity.deleteWordFromSharedPreferences(sharedPreferences, listOfDifficultWords.get(i), getApplicationContext(), getString(R.string.new_shared_pref_word));
                 listOfDifficultWords.remove(i);
                 difficultWordsArrayAdapter.notifyDataSetChanged();
-                Toast.makeText(getApplicationContext(), "Word has been deleted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.words_are_deleted), Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
@@ -72,7 +72,7 @@ public class DifficultWordsActivity extends WearableActivity
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
             {
                 Intent intent = new Intent(getApplicationContext(), DefinitionAndExampleActivity.class);
-                intent.putExtra("word", listOfDifficultWords.get(i));
+                intent.putExtra(getString(R.string.intent_extra_string), listOfDifficultWords.get(i));
                 startActivity(intent);
             }
         });

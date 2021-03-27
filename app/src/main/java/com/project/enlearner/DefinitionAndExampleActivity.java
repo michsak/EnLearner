@@ -15,7 +15,7 @@ public class DefinitionAndExampleActivity extends WearableActivity
     {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
-        word = intent.getStringExtra("word");
+        word = intent.getStringExtra(getString(R.string.db_column));
         setContentView(R.layout.activity_definition_and_example);
         descriptionTextView = findViewById(R.id.definitionText);
         exampleTextView = findViewById(R.id.exampleText);
