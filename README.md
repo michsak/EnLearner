@@ -24,7 +24,8 @@ They repeatedly remind the user to open the app and check out the new word.
 ## Overview
 <img src="https://github.com/michsak/EnLearner/blob/master/overview/gif-overview.gif" width="350" height="350" />
 
-The app is available on the Goole Play store, so do not hesitate and give it a try.
+The app is available [here][3], so do not hesitate and give it a try.
 
 [1]: https://github.com/michsak/EnLearner/tree/master/first_word_scraper
 [2]: https://github.com/michsak/EnLearner/tree/master/web_scraper
+[3]: https://github.com/michsak/EnLearner/blob/master/apk%20build/EnLearner.apk
