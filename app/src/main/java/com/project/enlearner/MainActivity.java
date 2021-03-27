@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,18 +20,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 
-
-//TODO
-//unit tests
-
 public class MainActivity extends WearableActivity implements Runnable
 {
-    private final int wordsCount = 362;
+    private final int wordsCount = 458;
     private final int[] intervalTimePossibilities = new int[]{12, 16, 24};
     private final int maxNumberOfWordsInMemory = 5;
-    private boolean firstRun = true;
-    private String word = "";
     private int intervalTime = 24;
+    private boolean firstConnectionCheck = true;
+    private String word;
     private SharedPreferences difficultWordsSharedPrefs;
     private SharedPreferences newWordsSharedPrefs;
 
@@ -42,9 +37,9 @@ public class MainActivity extends WearableActivity implements Runnable
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setAmbientEnabled();
-        difficultWordsSharedPrefs = this.getSharedPreferences("com.project.enlearner", Context.MODE_PRIVATE);
-        newWordsSharedPrefs = this.getSharedPreferences("newWordsPreference", Context.MODE_PRIVATE);
-        //clearSharedPreferences("newWordsPreference");
+        difficultWordsSharedPrefs = this.getSharedPreferences(getString(R.string.difficult_word_preferences), Context.MODE_PRIVATE);
+        newWordsSharedPrefs = this.getSharedPreferences(getString(R.string.new_word_preferences), Context.MODE_PRIVATE);
+        word = getString(R.string.empty_text);
         onFirstRun();
         Thread internetConnectionCheck = new Thread();
         internetConnectionCheck.start();
@@ -53,19 +48,17 @@ public class MainActivity extends WearableActivity implements Runnable
     @Override
     public void run()
     {
-        while (isNetworkConnected() == true && firstRun)
+        while (isNetworkConnected() == true && firstConnectionCheck)
         {
             saveDownloadedWordsToSharedPrefs();
-            firstRun = false;
-            Log.i("info", Boolean.toString(isNetworkConnected()));
-
+            firstConnectionCheck = false;
             try
             {
                 Thread.sleep(15000);
             }
             catch (InterruptedException e)
             {
-                e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
         }
     }
@@ -78,14 +71,14 @@ public class MainActivity extends WearableActivity implements Runnable
 
     private void onFirstRun()
     {
-        Boolean isFirstRun = getSharedPreferences("FirstRunPreference", MODE_PRIVATE).getBoolean("isFirstRun", true);
+        Boolean isFirstRun = getSharedPreferences(getString(R.string.first_run_preference), MODE_PRIVATE).getBoolean("isFirstRun", true);
         if (isFirstRun)
         {
             showDialog();
             setUpNotification(intervalTime);
-            addNewWordToSharedPref("Aggravated");
+            addNewWordToSharedPref(getString(R.string.first_word));
         }
-        getSharedPreferences("FirstRunPreference", MODE_PRIVATE).edit().putBoolean("isFirstRun", false).apply();
+        getSharedPreferences(getString(R.string.first_run_preference), MODE_PRIVATE).edit().putBoolean("isFirstRun", false).apply();
     }
 
     @Override
@@ -99,7 +92,7 @@ public class MainActivity extends WearableActivity implements Runnable
     {
         downloadSingleWordFromDataBase();
         ArrayList<String> listOfNewWords = new ArrayList<String>();
-        HashSet<String> setOfNewWords = (HashSet<String>) newWordsSharedPrefs.getStringSet("new_words", new HashSet<String>());
+        HashSet<String> setOfNewWords = (HashSet<String>) newWordsSharedPrefs.getStringSet(getString(R.string.set_of_new_words), new HashSet<String>());
 
         for (String word : setOfNewWords)
         {
@@ -113,11 +106,11 @@ public class MainActivity extends WearableActivity implements Runnable
             {
                 setOfNewWords.add(listOfNewWords.get(i));
             }
-            newWordsSharedPrefs.edit().putStringSet("new_words", setOfNewWords).apply();
+            newWordsSharedPrefs.edit().putStringSet(getString(R.string.set_of_new_words), setOfNewWords).apply();
         }
         catch (IndexOutOfBoundsException ie)
         {
-            setButtonText("No connection");
+            setButtonText(getString(R.string.no_connection));
         }
         for (int i=0; i<maxNumberOfWordsInMemory-listOfNewWords.size(); i++)
         {
@@ -153,8 +146,8 @@ public class MainActivity extends WearableActivity implements Runnable
     private void downloadSingleWordFromDataBase()
     {
         int randomWordNumber = (int)(Math.random()*(wordsCount));
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Words");
-        query.orderByAscending("word");
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(getString(R.string.db_table_name));
+        query.orderByAscending(getString(R.string.db_column));
         query.setSkip(randomWordNumber);
         query.getFirstInBackground(new GetCallback<ParseObject>()
         {
@@ -163,12 +156,12 @@ public class MainActivity extends WearableActivity implements Runnable
             {
                 if (e==null && object!=null)
                 {
-                    word = object.getString("word").toString();
+                    word = object.getString(getString(R.string.db_column)).toString();
                     addNewWordToSharedPref(word);
                 }
                 else
                 {
-                    word = "Loading";
+                    word = getString(R.string.loading_text);
                 }
             }
         });
@@ -205,9 +198,9 @@ public class MainActivity extends WearableActivity implements Runnable
         final TextView descriptionTextView = findViewById(R.id.definitionTextView);
         final TextView exampleTextView = findViewById(R.id.exampleTextView);
         final Button button = findViewById(R.id.wordButton);
-        descriptionTextView.setText("");
+        descriptionTextView.setText(getString(R.string.empty_text));
         descriptionTextView.setVisibility(View.INVISIBLE);
-        exampleTextView.setText("");
+        exampleTextView.setText(getString(R.string.empty_text));
         exampleTextView.setVisibility(View.INVISIBLE);
         button.setVisibility(View.VISIBLE);
     }
@@ -224,54 +217,43 @@ public class MainActivity extends WearableActivity implements Runnable
         try
         {
             HashSet<String> sharedPrefSet = new HashSet<String>();
-            if(difficultWordsSharedPrefs.contains("words"))
+            if(difficultWordsSharedPrefs.contains(getString(R.string.new_shared_pref_word)))
             {
-                sharedPrefSet = (HashSet<String>) difficultWordsSharedPrefs.getStringSet("words", new HashSet<String>());
+                sharedPrefSet = (HashSet<String>) difficultWordsSharedPrefs.getStringSet(getString(R.string.new_shared_pref_word), new HashSet<String>());
             }
             sharedPrefSet.add(word);
             difficultWordsSharedPrefs.edit().clear().apply();
-            difficultWordsSharedPrefs.edit().putStringSet("words", sharedPrefSet).apply();
-            Toast.makeText(getApplicationContext(), "Word has been added", Toast.LENGTH_SHORT).show();
-
-            for (String wordnew : sharedPrefSet)
-            {
-                Log.i("info", wordnew);
-            }
+            difficultWordsSharedPrefs.edit().putStringSet(getString(R.string.new_shared_pref_word), sharedPrefSet).apply();
+            Toast.makeText(getApplicationContext(), getString(R.string.words_are_added), Toast.LENGTH_SHORT).show();
         }
         catch (Exception e)
         {
-            Toast.makeText(getApplicationContext(), "Try again later", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.try_again), Toast.LENGTH_SHORT).show();
         }
     }
 
     private void addNewWordToSharedPref(String word)
     {
-        try
+        HashSet<String> sharedPrefSet = new HashSet<String>();
+        if(newWordsSharedPrefs.contains(getString(R.string.set_of_new_words)))
         {
-            HashSet<String> sharedPrefSet = new HashSet<String>();
-            if(newWordsSharedPrefs.contains("new_words"))
-            {
-                sharedPrefSet = (HashSet<String>) newWordsSharedPrefs.getStringSet("new_words", new HashSet<String>());
-            }
-            sharedPrefSet.add(word);
-            newWordsSharedPrefs.edit().clear().apply();
-            newWordsSharedPrefs.edit().putStringSet("new_words", sharedPrefSet).apply();
+            sharedPrefSet = (HashSet<String>) newWordsSharedPrefs.getStringSet(getString(R.string.set_of_new_words), new HashSet<String>());
         }
-        catch (Exception e)
-        {
-        }
+        sharedPrefSet.add(word);
+        newWordsSharedPrefs.edit().clear().apply();
+        newWordsSharedPrefs.edit().putStringSet(getString(R.string.set_of_new_words), sharedPrefSet).apply();
     }
 
-    public static void deleteWordFromSharedPreferences(SharedPreferences sharedPreferences, String word, Context context)
+    public static void deleteWordFromSharedPreferences(SharedPreferences sharedPreferences, String word, Context context, String sharedPrefString)
     {
         HashSet<String> sharedPrefSet = new HashSet<String>();
-        if(sharedPreferences.contains("words"))
+        if(sharedPreferences.contains(sharedPrefString))
         {
-            sharedPrefSet = (HashSet<String>) sharedPreferences.getStringSet("words", new HashSet<String>());
+            sharedPrefSet = (HashSet<String>) sharedPreferences.getStringSet(sharedPrefString, new HashSet<String>());
         }
         sharedPrefSet.remove(word);
         sharedPreferences.edit().clear().apply();
-        sharedPreferences.edit().putStringSet("words", sharedPrefSet).apply();
+        sharedPreferences.edit().putStringSet(sharedPrefString, sharedPrefSet).apply();
         Toast.makeText(context, "Word has been deleted", Toast.LENGTH_SHORT).show();
     }
 
@@ -284,14 +266,14 @@ public class MainActivity extends WearableActivity implements Runnable
 
     public void showSavedWords(View view)
     {
-        if (difficultWordsSharedPrefs.contains("words"))
+        if (difficultWordsSharedPrefs.contains(getString(R.string.new_shared_pref_word)))
         {
             Intent intent = new Intent(getApplicationContext(), DifficultWordsActivity.class);
             startActivity(intent);
         }
         else
         {
-            Toast.makeText(getApplicationContext(), "You haven't saved any word", Toast.LENGTH_SHORT);
+            Toast.makeText(getApplicationContext(), getString(R.string.no_words_are_saved), Toast.LENGTH_SHORT);
         }
     }
 

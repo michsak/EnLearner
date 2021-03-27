@@ -14,4 +14,17 @@
     <string name="twenty_four_hours">24h</string>
     <string name="new_words_interval">Choose new words interval</string>
     <string name="loading_text">Loading...</string>
+    <string name="first_word">Aggravated</string>
+    <string name="new_word_preferences">newWordsPreference</string>
+    <string name="difficult_word_preferences">com.project.enlearner</string>
+    <string name="first_run_preference">FirstRunPreference</string>
+    <string name="set_of_new_words">new_words</string>
+    <string name="no_connection">No connection</string>
+    <string name="db_table_name">Words</string>
+    <string name="db_column">word</string>
+    <string name="empty_text"></string>
+    <string name="new_shared_pref_word">words</string>
+    <string name="words_are_added">Words has been added</string>
+    <string name="try_again">Try again later</string>
+    <string name="no_words_are_saved">"You haven't saved any word"</string>
 </resources>

@@ -55,7 +55,7 @@ public class DifficultWordsActivity extends WearableActivity
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l)
             {
-                MainActivity.deleteWordFromSharedPreferences(sharedPreferences, listOfDifficultWords.get(i), getApplicationContext());
+                MainActivity.deleteWordFromSharedPreferences(sharedPreferences, listOfDifficultWords.get(i), getApplicationContext(), "words");
                 listOfDifficultWords.remove(i);
                 difficultWordsArrayAdapter.notifyDataSetChanged();
                 Toast.makeText(getApplicationContext(), "Word has been deleted", Toast.LENGTH_SHORT).show();
