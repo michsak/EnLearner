@@ -74,7 +74,8 @@ public class MainActivity extends WearableActivity implements Runnable
 
     private void onFirstRun()
     {
-        Boolean isFirstRun = getSharedPreferences(getString(R.string.first_run_preference), MODE_PRIVATE).getBoolean("isFirstRun", true);
+        //Boolean isFirstRun = getSharedPreferences(getString(R.string.first_run_preference), MODE_PRIVATE).getBoolean("isFirstRun", true);
+        Boolean isFirstRun = true;
         if (isFirstRun)
         {
             showDialog();
@@ -283,8 +284,7 @@ public class MainActivity extends WearableActivity implements Runnable
     private void setUpNotification(int interval)
     {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY));
-        calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE));
+        calendar.add(Calendar.MINUTE, -5);
         Intent intent = new Intent(getApplicationContext(), NotificationReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
