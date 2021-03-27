@@ -48,18 +48,21 @@ public class MainActivity extends WearableActivity implements Runnable
     @Override
     public void run()
     {
-        while (isNetworkConnected() == true && firstConnectionCheck)
+        while (isNetworkConnected() == false)
         {
-            saveDownloadedWordsToSharedPrefs();
-            firstConnectionCheck = false;
             try
             {
                 Thread.sleep(15000);
+                firstConnectionCheck = false;
             }
             catch (InterruptedException e)
             {
                 Thread.currentThread().interrupt();
             }
+        }
+        if (isNetworkConnected() == true && firstConnectionCheck == false)
+        {
+            saveDownloadedWordsToSharedPrefs();
         }
     }
 
