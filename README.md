@@ -26,6 +26,9 @@ They repeatedly remind the user to open the app and check out the new word.
 
 The app is available [here][3], so do not hesitate and give it a try.
 
+## Note
+Used AWS instance is no longer running due to sustaining costs.
+
 [1]: https://github.com/michsak/EnLearner/tree/master/first_word_scraper
 [2]: https://github.com/michsak/EnLearner/tree/master/web_scraper
 [3]: https://github.com/michsak/EnLearner/blob/master/apk%20build/EnLearner.apk
