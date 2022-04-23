@@ -4,7 +4,7 @@ The app purpose is to learn english words, which are stored in the AWS database.
 
 
 ## Downloading content
-As mentioned before words are downloaded from AWS (Amazon Elastic Compute Cloud - EC2). <br>
+As mentioned before words are downloaded from AWS EC2 instance. <br>
 The whole process is taking place in the background - it starts when app is launching and if there's no connection to the internet at the moment words are downloaded when the connection occurs.<br>
 In order to prevent user from the situation when he or she doesn't have access to the Internet at the moment, on every application start, when there's established an internet 
 connection, there are downloaded 10 words.
